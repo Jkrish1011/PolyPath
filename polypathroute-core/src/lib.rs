@@ -6,7 +6,7 @@ mod errors;
 
 use crate::cache::CacheManager;
 use crate::config::ConfigManager;
-use crate::logging::LoggingManager;
+pub use crate::logging::LoggingManager;
 use crate::persistence::PersistenceManager;
 use crate::errors::Errors;
 

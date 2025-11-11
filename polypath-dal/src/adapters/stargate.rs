@@ -108,7 +108,7 @@ impl BridgeAdapter for StargateAdapter {
             500.0
         };
 
-        let bridgeEdge = BridgeEdge {
+        let bridge_edge = BridgeEdge {
             from: src_chain_key.unwrap().to_string(),
             to: dst_chain_key.unwrap().to_string(),
             cost: cost,
@@ -117,6 +117,6 @@ impl BridgeAdapter for StargateAdapter {
             risk: risk
         };
 
-        Ok(serde_json::to_value(&bridgeEdge)?)
+        Ok(serde_json::to_value(&bridge_edge)?)
     }
 }
