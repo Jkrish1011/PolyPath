@@ -28,8 +28,8 @@ pub struct ConfigManager {
 }
 
 impl ConfigManager {
-    pub fn new() -> Self {
-        let path = "./src/config/config.toml"; 
+    pub fn new(config_path: &str) -> Self {
+        let path = config_path; 
         let s = fs::read_to_string(path).unwrap();
         let cfg = toml::from_str::<ConfigManager>(&s).unwrap();
         cfg

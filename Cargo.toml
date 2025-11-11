@@ -1,0 +1,20 @@
+[workspace]
+members = [
+  "polypath-dal",
+  "polypathroute-core"
+]
+
+[workspace.package]
+version = "0.1.0"
+edition = "2021"
+authors = ["Jayakrishnan Ashok <jayakrishnanashok@gmail.com>"]
+license = "MIT"
+description = "A modular Rust-based framework to discover, evaluate, and expose optimal cross-chain routes across bridges and DEX aggregators."
+
+[workspace.dependencies]
+# Common dependencies that will be used across multiple crates
+anyhow = "1.0"
+thiserror = "1.0"
+tracing = "0.1"
+serde = { version = "1.0", features = ["derive"] }
+tokio = { version = "1.0", features = ["full"] }

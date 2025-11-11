@@ -20,10 +20,10 @@ pub struct CoreContext {
 
 
 impl CoreContext {
-    pub fn new() -> Self {
+    pub fn new(config_path: &str) -> Self {
         Self {
             cache_manager: CacheManager::new(),
-            config_manager: ConfigManager::new(),
+            config_manager: ConfigManager::new(config_path),
             logging_manager: LoggingManager {  },
             persisence_manager: PersistenceManager::new()
         }
@@ -37,7 +37,7 @@ mod tests {
 
     #[test]
     fn test_get_core_context() {
-        let coreVal: CoreContext = CoreContext::new();
+        let coreVal: CoreContext = CoreContext::new("./src/config/config.toml");
         println!("coreValue: {:?}", &coreVal);
     }
 }
