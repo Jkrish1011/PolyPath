@@ -5,8 +5,40 @@ log_level="info"
 
 [bridges.stargate]
 base_url=""
-chains= ["ethereum", "polygon", "arbitrum"]
+chains= ["ethereum", "polygon", "arbitrum", "base"]
 fees=0.0006
+
+[[bridges.stargate.pairs]]
+source_chain="ethereum"
+source_token_name="USDC"
+destination_chain="polygon"
+destination_token_name="USDC"
+source_address="0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48"
+destination_address="0x3c499c542cef5e3811e1192ce70d8cc03d5c3359"
+
+[[bridges.stargate.pairs]]
+source_chain="base"
+source_token_name="USDC"
+destination_chain="arbitrum"
+destination_token_name="USDC"
+source_address="0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913"
+destination_address="0xaf88d065e77c8cC2239327C5EDb3A432268e5831"
+
+[[bridges.stargate.pairs]]
+source_chain="ethereum"
+source_token_name="USDC"
+destination_chain="polygon"
+destination_token_name="USDC"
+source_address="0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48"
+destination_address="0x3c499c542cef5e3811e1192ce70d8cc03d5c3359"
+
+[[bridges.stargate.pairs]]
+source_chain="base"
+source_token_name="USDC"
+destination_chain="polygon"
+destination_token_name="USDC"
+source_address="0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913"
+destination_address="0x3c499c542cEF5E3811e1192ce70d8cC03d5c3359"
 
 [bridges.wormhole]
 base_url=""

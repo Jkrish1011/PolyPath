@@ -15,9 +15,20 @@ struct GlobalConfig {
 }
 
 #[derive(Deserialize, Debug, Clone)]
-struct BridgeConfig {
+pub struct Pair {
+    pub source_chain: String,
+    pub destination_chain: String,
+    pub source_token_name: String,
+    pub source_address: String,
+    pub destination_address: String,
+    pub destination_token_name: String,
+}
+
+#[derive(Deserialize, Debug, Clone)]
+pub struct BridgeConfig {
     pub base_url: String,
     pub chains: Vec<String>,
+    pub pairs: Option<Vec<Pair>>,
     pub extra: Option<HashMap<String, toml::Value>>
 }
 

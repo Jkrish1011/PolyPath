@@ -4,9 +4,7 @@ use tracing::{event, Level};
 use anyhow::Result;
 
 #[derive(Debug, Clone)]
-pub struct LoggingManager {
-
-}
+pub struct LoggingManager;
 
 impl LoggingManager {
 

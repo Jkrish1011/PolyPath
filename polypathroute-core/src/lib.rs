@@ -18,7 +18,6 @@ pub struct CoreContext {
     pub persisence_manager: PersistenceManager
 }
 
-
 impl CoreContext {
     pub fn new(config_path: &str) -> Self {
         Self {

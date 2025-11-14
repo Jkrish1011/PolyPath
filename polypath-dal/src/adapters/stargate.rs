@@ -6,7 +6,7 @@ use super::{
 use std::collections::HashMap;
 use reqwest::blocking::Client;
 use serde_json::Value;
-use anyhow::Result;
+use anyhow::{Result, anyhow};
 
 pub struct StargateAdapter {
     pub name: String,
@@ -67,11 +67,13 @@ impl BridgeAdapter for StargateAdapter {
 
         let src_chain_key = quote
                                     .get("srcChainKey")
-                                    .and_then(|v| v.as_str());
+                                    .and_then(|v| v.as_str())
+                                    .ok_or_else(|| anyhow::anyhow!("srcChainKey not present!"))?;
         
         let dst_chain_key = quote
                                     .get("dstChainKey")
-                                    .and_then(|v| v.as_str());
+                                    .and_then(|v| v.as_str())
+                                    .ok_or_else(|| anyhow::anyhow!("dstChainKey not present!"))?;
 
         let cost = quote
                             .get("fees")
@@ -109,8 +111,8 @@ impl BridgeAdapter for StargateAdapter {
         };
 
         let bridge_edge = BridgeEdge {
-            from: src_chain_key.unwrap().to_string(),
-            to: dst_chain_key.unwrap().to_string(),
+            from: src_chain_key.to_string(),
+            to: dst_chain_key.to_string(),
             cost: cost,
             speed: speed,
             liquidity: liquidity.unwrap(),

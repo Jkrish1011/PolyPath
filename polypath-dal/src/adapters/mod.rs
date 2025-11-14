@@ -32,6 +32,9 @@ pub fn create_adapter(name: &str) -> Option<DynBridgeAdapter> {
         "stargate" => {
             return Some(Box::new(stargate::StargateAdapter::new()));
         }
+        "wormhole" => {
+            return Some(Box::new(wormhole::WormholeAdapter::new()));
+        }
         _ => {
             return None;
         }
