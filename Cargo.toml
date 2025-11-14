@@ -1,6 +1,7 @@
 [workspace]
 members = [
-  "polypath-dal",
+  "polypath-dal", 
+  "polypath-graph",
   "polypathroute-core"
 ]
 
