@@ -21,7 +21,7 @@ use std::{
 use serde::{Serialize, Deserialize};
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash, PartialOrd, Ord)]
-pub struct NodeId(u64);
+pub struct NodeId(pub u64);
 
 impl NodeId {
     pub fn from_parts(chain: &str, identifier: &str) -> Self {
@@ -46,7 +46,7 @@ pub enum NodeType {
 }
 
 #[derive(Debug, Clone)]
-struct Node {
+pub struct Node {
     pub id: NodeId,
     pub node_type: NodeType,
     pub metadata: HashMap<String, String>,
@@ -54,7 +54,7 @@ struct Node {
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
-struct EdgeMetrics {
+pub struct EdgeMetrics {
     pub cost: f64,
     pub speed: f64,
     pub liquidity: f64,
