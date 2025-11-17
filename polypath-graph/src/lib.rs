@@ -1,6 +1,7 @@
 mod types;
 mod graph;
 mod routing;
+mod scoring;
 
 pub fn add(left: u64, right: u64) -> u64 {
     left + right

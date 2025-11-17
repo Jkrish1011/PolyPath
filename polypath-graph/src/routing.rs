@@ -9,11 +9,6 @@ use std::{
     }
 };
 
-pub struct RoutingEngine {
-    graph: Arc<Graph>,
-    max_hops: usize,
-}
-
 #[derive(Clone, PartialEq)]
 struct State {
     node: NodeId,
@@ -35,6 +30,13 @@ impl PartialOrd for State {
         Some(self.cmp(other))
     }
 }
+
+#[derive(Debug, Clone)]
+pub struct RoutingEngine {
+    graph: Arc<Graph>,
+    max_hops: usize,
+}
+
 
 impl RoutingEngine {
     pub fn new(graph: Arc<Graph>, max_hops: usize) -> Self {
@@ -104,10 +106,50 @@ impl RoutingEngine {
                     });
                 }
             }
-
         }
 
         None
+    }
+
+    pub fn find_candidate_paths(
+        &self,
+        start: NodeId,
+        end: NodeId,
+        params: &RoutingParams,
+        max_paths: usize,
+    ) -> Vec<Path> {
+        let mut paths = Vec::new();
+        let mut visited_paths = HashSet::new();
+
+        // Try running A* multiple times and exclude previous paths/runs
+
+        for _ in 0..max_paths {
+            if let Some(path) = self.find_path_with_exclusions(start, end, params, None) {
+                let path_signature = self.path_signature(&path);
+                if !visited_paths.contains(&path_signature) {
+                    visited_paths.insert(path_signature);
+                    paths.push(path);
+                }
+            }
+        }
+
+        paths
+    }
+
+    fn find_path_with_exclusions(
+        &self,
+        start: NodeId,
+        end: NodeId,
+        params: &RoutingParams,
+        exclude: Option<&HashSet<Vec<NodeId>>>
+    ) -> Option<Path> {
+        self.find_path(start, end, params)
+    }
+
+    fn path_signature(&self, path: &Path) -> Vec<NodeId> {
+        path.hops.iter().map(|hop| hop.from).chain(
+            path.hops.last().map(|hop| hop.to)
+        ).collect()
     }
 
     pub fn reconstruct_path(
