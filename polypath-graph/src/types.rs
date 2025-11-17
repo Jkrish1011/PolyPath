@@ -20,7 +20,7 @@ use std::{
 };
 use serde::{Serialize, Deserialize};
 
-#[derive(Debug, Clone, Copy, PartialEq, Eq, Hash, PartialOrd, Ord)]
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Hash, PartialOrd, Ord, Serialize, Deserialize)]
 pub struct NodeId(pub u64);
 
 impl NodeId {
@@ -151,5 +151,110 @@ impl Edge {
 
     pub fn get_metrics(&self) -> EdgeMetrics {
         self.metrics.read()
+    }
+}
+
+// A single hop in a path
+#[derive(Debug, Clone, Serialize)]
+pub struct Hop {
+    pub from: NodeId,
+    pub to: NodeId,
+    pub bridge_name: String,
+    pub metrics: EdgeMetrics
+}
+
+// complete path from source to destination
+#[derive(Debug, Clone, Serialize)]
+pub struct Path {
+    pub hops: Vec<Hop>,
+    pub total_cost: f64, 
+    pub total_time: f64,
+    pub total_risk: f64,
+    pub min_liquidity: f64,
+    pub aggregate_score: f64,
+}
+
+#[derive(Debug, Clone, Serialize)]
+pub struct ScoreBreakDown {
+    pub cost_score: f64,
+    pub speed_score: f64,
+    pub liquidity_score: f64,
+    pub risk_score: f64,
+    pub final_score: f64
+}
+
+#[derive(Debug, Clone, Serialize)]
+pub struct RankedPath {
+    pub path: Path, 
+    pub rank: usize, 
+    pub score_breakdown: ScoreBreakDown
+}
+
+pub struct RouteIntent {
+    pub from_chain: String,
+    pub from_token: String,
+    pub to_chain: String,
+    pub to_token: String,
+    pub amount: f64,
+    pub preference: Option<String> // "cheapest" , "fastest", "balanced"
+}
+
+#[derive(Debug, Clone)]
+pub struct RoutingParams {
+    pub alpha: f64, // Cost weight
+    pub beta: f64, // Speed weight
+    pub gamma: f64, // Liquidity Weight (inversely connected!)
+    pub delta: f64, // Risk weight
+}
+
+impl Default for RoutingParams {
+    fn default() -> Self {
+        Self {
+            alpha: 0.4,
+            beta: 0.3,
+            gamma: 0.2,
+            delta: 0.1,
+        }
+    }
+}
+
+impl RoutingParams {
+    pub fn cheapest() -> Self {
+        Self {
+            alpha: 1.0,
+            beta: 0.0,
+            gamma: 0.0,
+            delta: 0.0
+        }
+    }
+
+    pub fn fastest() -> Self {
+        Self {
+            alpha: 0.0,
+            beta: 1.0,
+            gamma: 0.0,
+            delta: 0.0
+        }
+    }
+
+    pub fn balanced() -> Self {
+        Self::default()
+    }
+
+    pub fn from_preferences(preference: &str) -> Self {
+        match preference {
+            "cheapest" => {
+                Self::cheapest()
+            }
+            "fastest" => {
+                Self::fastest()
+            }
+            "balanced" => {
+                Self::balanced()
+            }
+            _ => {
+                Self::balanced()
+            }
+        }
     }
 }
