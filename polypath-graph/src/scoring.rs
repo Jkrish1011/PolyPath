@@ -187,3 +187,48 @@ impl Ranker {
         ranked
     }
 }
+
+
+// Complete scoring Engine
+pub struct ScoringEngine {
+    normalizer: ScoreNormalizer,
+    optimizer: Optimizer,
+    ranker: Ranker
+}
+
+
+impl ScoringEngine {
+    pub fn new() -> Self {
+        Self {
+            normalizer: ScoreNormalizer,
+            optimizer: Optimizer,
+            ranker: Ranker
+        }
+    }
+
+    pub fn score_and_rank(
+        &self,
+        paths: Vec<Path>,
+        params: &RoutingParams,
+        max_results: usize,
+    ) -> Vec<RankedPath> {
+        if paths.is_empty() {
+            return Vec::new();
+        }
+
+        // Normalize
+        let normalized = self.normalizer.normalize_path(&paths);
+
+        // Optimize
+        let score = if params.alpha + params.beta + params.gamma + params.delta == 1.0 {
+            // Weighted Sum
+            self.optimizer.weighed_sum(&normalized, params)
+        } else{
+            // Pareto front
+            self.optimizer.pareto_front(&normalized, max_results)
+        };
+
+        self.ranker.rank(score, max_results)
+
+    }
+}
